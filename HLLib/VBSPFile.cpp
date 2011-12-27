@@ -419,6 +419,8 @@ hlBool CVBSPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackag
 						delete []lpComment;
 						return hlTrue;
 					}
+                    default:
+                        break;
 				}
 			}
 			else
@@ -441,6 +443,8 @@ hlBool CVBSPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackag
 						hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], *(hlUInt *)this->pHeader->lpLumps[uiID].lpFourCC, hlTrue);
 						return hlTrue;
 					}
+                    default:
+                        break;
 				}
 
 				if(pItem->GetID() == HL_VBSP_LUMP_PAKFILE)
@@ -463,11 +467,15 @@ hlBool CVBSPFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackag
 							delete []lpComment;
 							return hlTrue;
 						}
+                        default:
+                            break;
 					}
 				}
 			}
 			break;
 		}
+        default:
+            break;
 	}
 
 	return hlFalse;

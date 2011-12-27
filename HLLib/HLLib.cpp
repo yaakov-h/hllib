@@ -141,18 +141,20 @@ HLLIB_API hlBool hlGetBooleanValidate(HLOption eOption, hlBool *pValue)
 {
 	switch(eOption)
 	{
-	case HL_OVERWRITE_FILES:
-		*pValue = bOverwriteFiles;
-		return hlTrue;
-	case HL_READ_ENCRYPTED:
-		*pValue = bReadEncrypted;
-		return hlTrue;
-	case HL_FORCE_DEFRAGMENT:
-		*pValue = bForceDefragment;
-		return hlTrue;
-	case HL_PACKAGE_BOUND:
-		*pValue = pPackage != 0;
-		return hlTrue;
+        case HL_OVERWRITE_FILES:
+            *pValue = bOverwriteFiles;
+            return hlTrue;
+        case HL_READ_ENCRYPTED:
+            *pValue = bReadEncrypted;
+            return hlTrue;
+        case HL_FORCE_DEFRAGMENT:
+            *pValue = bForceDefragment;
+            return hlTrue;
+        case HL_PACKAGE_BOUND:
+            *pValue = pPackage != 0;
+            return hlTrue;
+        default:
+            break;
 	}
 
 	return hlFalse;
@@ -162,15 +164,17 @@ HLLIB_API hlVoid hlSetBoolean(HLOption eOption, hlBool bValue)
 {
 	switch(eOption)
 	{
-	case HL_OVERWRITE_FILES:
-		bOverwriteFiles = bValue;
-		break;
-	case HL_READ_ENCRYPTED:
-		bReadEncrypted = bValue;
-		break;
-	case HL_FORCE_DEFRAGMENT:
-		bForceDefragment = bValue;
-		break;
+        case HL_OVERWRITE_FILES:
+            bOverwriteFiles = bValue;
+            break;
+        case HL_READ_ENCRYPTED:
+            bReadEncrypted = bValue;
+            break;
+        case HL_FORCE_DEFRAGMENT:
+            bForceDefragment = bValue;
+            break;
+        default:
+            break;
 	}
 }
 
@@ -485,54 +489,56 @@ HLLIB_API hlVoid hlSetVoid(HLOption eOption, const hlVoid *pValue)
 {
 	switch(eOption)
 	{
-	case HL_PROC_OPEN:
-		pOpenProc = (POpenProc)pValue;
-		break;
-	case HL_PROC_CLOSE:
-		pCloseProc = (PCloseProc)pValue;
-		break;
-	case HL_PROC_READ:
-		pReadProc = (PReadProc)pValue;
-		break;
-	case HL_PROC_WRITE:
-		pWriteProc = (PWriteProc)pValue;
-		break;
-	case HL_PROC_SEEK:
-		pSeekProc = (PSeekProc)pValue;
-		break;
-	case HL_PROC_SEEK_EX:
-		pSeekExProc = (PSeekExProc)pValue;
-		break;
-	case HL_PROC_TELL:
-		pTellProc = (PTellProc)pValue;
-		break;
-	case HL_PROC_TELL_EX:
-		pTellExProc = (PTellExProc)pValue;
-		break;
-	case HL_PROC_SIZE:
-		pSizeProc = (PSizeProc)pValue;
-		break;
-	case HL_PROC_SIZE_EX:
-		pSizeExProc = (PSizeExProc)pValue;
-		break;
-	case HL_PROC_EXTRACT_ITEM_START:
-		pExtractItemStartProc = (PExtractItemStartProc)pValue;
-		break;
-	case HL_PROC_EXTRACT_ITEM_END:
-		pExtractItemEndProc = (PExtractItemEndProc)pValue;
-		break;
-	case HL_PROC_EXTRACT_FILE_PROGRESS:
-		pExtractFileProgressProc = (PExtractFileProgressProc)pValue;
-		break;
-	case HL_PROC_VALIDATE_FILE_PROGRESS:
-		pValidateFileProgressProc = (PValidateFileProgressProc)pValue;
-		break;
-	case HL_PROC_DEFRAGMENT_PROGRESS:
-		pDefragmentProgressProc = (PDefragmentProgressProc)pValue;
-		break;
-	case HL_PROC_DEFRAGMENT_PROGRESS_EX:
-		pDefragmentProgressExProc = (PDefragmentProgressExProc)pValue;
-		break;
+        case HL_PROC_OPEN:
+            pOpenProc = (POpenProc)pValue;
+            break;
+        case HL_PROC_CLOSE:
+            pCloseProc = (PCloseProc)pValue;
+            break;
+        case HL_PROC_READ:
+            pReadProc = (PReadProc)pValue;
+            break;
+        case HL_PROC_WRITE:
+            pWriteProc = (PWriteProc)pValue;
+            break;
+        case HL_PROC_SEEK:
+            pSeekProc = (PSeekProc)pValue;
+            break;
+        case HL_PROC_SEEK_EX:
+            pSeekExProc = (PSeekExProc)pValue;
+            break;
+        case HL_PROC_TELL:
+            pTellProc = (PTellProc)pValue;
+            break;
+        case HL_PROC_TELL_EX:
+            pTellExProc = (PTellExProc)pValue;
+            break;
+        case HL_PROC_SIZE:
+            pSizeProc = (PSizeProc)pValue;
+            break;
+        case HL_PROC_SIZE_EX:
+            pSizeExProc = (PSizeExProc)pValue;
+            break;
+        case HL_PROC_EXTRACT_ITEM_START:
+            pExtractItemStartProc = (PExtractItemStartProc)pValue;
+            break;
+        case HL_PROC_EXTRACT_ITEM_END:
+            pExtractItemEndProc = (PExtractItemEndProc)pValue;
+            break;
+        case HL_PROC_EXTRACT_FILE_PROGRESS:
+            pExtractFileProgressProc = (PExtractFileProgressProc)pValue;
+            break;
+        case HL_PROC_VALIDATE_FILE_PROGRESS:
+            pValidateFileProgressProc = (PValidateFileProgressProc)pValue;
+            break;
+        case HL_PROC_DEFRAGMENT_PROGRESS:
+            pDefragmentProgressProc = (PDefragmentProgressProc)pValue;
+            break;
+        case HL_PROC_DEFRAGMENT_PROGRESS_EX:
+            pDefragmentProgressExProc = (PDefragmentProgressExProc)pValue;
+            break;
+        default:
+            break;
 	}
 }
 
