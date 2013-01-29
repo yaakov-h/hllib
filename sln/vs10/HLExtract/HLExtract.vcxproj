@@ -205,7 +205,7 @@
   </ImportGroup>
   <Target Name="CopyHLLib" AfterTargets="InitializeBuildStatus">
     <Message Text="Copying HLLib to output..." Importance="high" />
-    <Copy SourceFiles="$(SolutionDir)\HLLib\$(Platform)\$(Configuration)\HLLib.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="$(SolutionDir)\HLLib\$(Platform)\$(Configuration)\HLLib.pdb" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="$(SolutionDir)\HLLib\$(Platform)\$(Configuration)\HLLib.dll" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
+    <Copy SourceFiles="$(SolutionDir)\HLLib\$(Platform)\$(Configuration)\HLLib.pdb" DestinationFolder="$(TargetDir)" SkipUnchangedFiles="true" ContinueOnError="true" />
   </Target>
 </Project>

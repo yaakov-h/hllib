@@ -200,13 +200,13 @@ hlBool CWADFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], (hlUInt)pLump->iType, hlTrue);
 					return hlTrue;
 				}
-                default:
-                    break;
+				default:
+					break;
 			}
 			break;
 		}
-        default:
-            break;
+		default:
+			break;
 	}
 
 	return hlFalse;

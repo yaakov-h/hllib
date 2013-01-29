@@ -1,6 +1,6 @@
 /*
  * HLLib
- * Copyright (C) 2006-2010 Ryan Gregg
+ * Copyright (C) 2006-2012 Ryan Gregg
 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -508,17 +508,16 @@ hlUInt CDirectoryFolder::GetSize(hlBool bRecurse) const
 		const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
 		switch(pItem->GetType())
 		{
-            case HL_ITEM_FOLDER:
-                if(bRecurse)
-                {
-                    uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSize(bRecurse);
-                }
-                break;
-            case HL_ITEM_FILE:
-                uiSize += static_cast<const CDirectoryFile *>(pItem)->GetSize();
-                break;
-            default:
-                break;
+			case HL_ITEM_FOLDER:
+				if(bRecurse)
+				{
+					uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSize(bRecurse);
+				}
+				break;
+			case HL_ITEM_FILE:
+				uiSize += static_cast<const CDirectoryFile *>(pItem)->GetSize();
+				break;
+			default: break;
 		}
 	}
 
@@ -534,17 +533,17 @@ hlULongLong CDirectoryFolder::GetSizeEx(hlBool bRecurse) const
 		const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
 		switch(pItem->GetType())
 		{
-		case HL_ITEM_FOLDER:
-			if(bRecurse)
-			{
-				uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSizeEx(bRecurse);
-			}
-			break;
-		case HL_ITEM_FILE:
-			uiSize += static_cast<hlULongLong>(static_cast<const CDirectoryFile *>(pItem)->GetSize());
-			break;
-        default:
-            break;
+			case HL_ITEM_FOLDER:
+				if(bRecurse)
+				{
+					uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSizeEx(bRecurse);
+				}
+				break;
+			case HL_ITEM_FILE:
+				uiSize += static_cast<hlULongLong>(static_cast<const CDirectoryFile *>(pItem)->GetSize());
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -560,17 +559,17 @@ hlUInt CDirectoryFolder::GetSizeOnDisk(hlBool bRecurse) const
 		const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
 		switch(pItem->GetType())
 		{
-            case HL_ITEM_FOLDER:
-                if(bRecurse)
-                {
-                    uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSizeOnDisk(bRecurse);
-                }
-                break;
-            case HL_ITEM_FILE:
-                uiSize += static_cast<const CDirectoryFile *>(pItem)->GetSizeOnDisk();
-                break;
-            default:
-                break;
+			case HL_ITEM_FOLDER:
+				if(bRecurse)
+				{
+					uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSizeOnDisk(bRecurse);
+				}
+				break;
+			case HL_ITEM_FILE:
+				uiSize += static_cast<const CDirectoryFile *>(pItem)->GetSizeOnDisk();
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -586,17 +585,17 @@ hlULongLong CDirectoryFolder::GetSizeOnDiskEx(hlBool bRecurse) const
 		const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
 		switch(pItem->GetType())
 		{
-            case HL_ITEM_FOLDER:
-                if(bRecurse)
-                {
-                    uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSizeOnDiskEx(bRecurse);
-                }
-                break;
-            case HL_ITEM_FILE:
-                uiSize += static_cast<hlULongLong>(static_cast<const CDirectoryFile *>(pItem)->GetSizeOnDisk());
-                break;
-            default:
-                break;
+			case HL_ITEM_FOLDER:
+				if(bRecurse)
+				{
+					uiSize += static_cast<const CDirectoryFolder *>(pItem)->GetSizeOnDiskEx(bRecurse);
+				}
+				break;
+			case HL_ITEM_FILE:
+				uiSize += static_cast<hlULongLong>(static_cast<const CDirectoryFile *>(pItem)->GetSizeOnDisk());
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -612,15 +611,15 @@ hlUInt CDirectoryFolder::GetFolderCount(hlBool bRecurse) const
 		const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
 		switch(pItem->GetType())
 		{
-            case HL_ITEM_FOLDER:
-                uiCount++;
-                if(bRecurse)
-                {
-                    uiCount += static_cast<const CDirectoryFolder *>(pItem)->GetFolderCount(bRecurse);
-                }
-                break;
-            default:
-                break;
+			case HL_ITEM_FOLDER:
+				uiCount++;
+				if(bRecurse)
+				{
+					uiCount += static_cast<const CDirectoryFolder *>(pItem)->GetFolderCount(bRecurse);
+				}
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -636,17 +635,17 @@ hlUInt CDirectoryFolder::GetFileCount(hlBool bRecurse) const
 		const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
 		switch(pItem->GetType())
 		{
-            case HL_ITEM_FOLDER:
-                if(bRecurse)
-                {
-                    uiCount += static_cast<const CDirectoryFolder *>(pItem)->GetFileCount(bRecurse);
-                }
-                break;
-            case HL_ITEM_FILE:
-                uiCount++;
-                break;
-            default:
-                break;
+			case HL_ITEM_FOLDER:
+				if(bRecurse)
+				{
+					uiCount += static_cast<const CDirectoryFolder *>(pItem)->GetFileCount(bRecurse);
+				}
+				break;
+			case HL_ITEM_FILE:
+				uiCount++;
+				break;
+			default:
+				break;
 		}
 	}
 
@@ -690,7 +689,11 @@ hlBool CDirectoryFolder::Extract(const hlChar *lpPath) const
 
 		for(hlUInt i = 0; i < this->pDirectoryItemVector->size(); i++)
 		{
-			bResult &= (*this->pDirectoryItemVector)[i]->Extract(lpFolderName);
+			const CDirectoryItem *pItem = (*this->pDirectoryItemVector)[i];
+			if(pItem->GetType() != HL_ITEM_FILE || static_cast<const CDirectoryFile *>(pItem)->GetExtractable())
+			{
+				bResult &= pItem->Extract(lpFolderName);
+			}
 		}
 	}
 

@@ -789,8 +789,8 @@ hlBool CGCFFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					}
 					return hlTrue;
 				}
-                default:
-                    break;
+				default:
+					break;
 			}
 			break;
 		}
@@ -821,13 +821,13 @@ hlBool CGCFFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					}
 					return hlTrue;
 				}
-                default:
-                    break;
+				default:
+					break;
 			}
 			break;
 		}
-        default:
-            break;
+		default:
+			break;
 	}
 
 	return hlFalse;

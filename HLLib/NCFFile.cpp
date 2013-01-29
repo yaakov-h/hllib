@@ -347,8 +347,8 @@ hlBool CNCFFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], this->lpDirectoryEntries[pFile->GetID()].uiDirectoryFlags, hlTrue);
 					return hlTrue;
 				}
-                default:
-                    break;
+				default:
+					break;
 			}
 			break;
 		}
@@ -362,13 +362,13 @@ hlBool CNCFFile::GetItemAttributeInternal(const CDirectoryItem *pItem, HLPackage
 					hlAttributeSetUnsignedInteger(&Attribute, this->lpItemAttributeNames[eAttribute], this->lpDirectoryEntries[pFolder->GetID()].uiDirectoryFlags, hlTrue);
 					return hlTrue;
 				}
-                default:
-                    break;
+				default:
+					break;
 			}
 			break;
 		}
-        default:
-            break;
+		default:
+			break;
 	}
 
 	return hlFalse;

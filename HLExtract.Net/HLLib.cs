@@ -1,6 +1,6 @@
 /*
  * HLExtract.Net
- * Copyright (C) 2008-2010 Ryan Gregg
+ * Copyright (C) 2008-2012 Ryan Gregg
 
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -19,8 +19,8 @@ using System.Runtime.InteropServices;
 public sealed class HLLib
 {
     #region Constants
-    public const int HL_VERSION_NUMBER = ((2 << 24) | (4 << 16) | (0 << 8) | 0);
-    public const string HL_VERSION_STRING = "2.4.0";
+    public const int HL_VERSION_NUMBER = ((2 << 24) | (4 << 16) | (4 << 8) | 0);
+    public const string HL_VERSION_STRING = "2.4.4";
 
     public const uint HL_ID_INVALID = 0xffffffff;
 
@@ -143,7 +143,8 @@ public sealed class HLLib
 	    HL_PACKAGE_XZP,
 	    HL_PACKAGE_ZIP,
 	    HL_PACKAGE_NCF,
-	    HL_PACKAGE_VPK
+        HL_PACKAGE_VPK,
+        HL_PACKAGE_SGA
     }
 
     public enum HLAttributeType : uint
@@ -193,6 +194,19 @@ public sealed class HLLib
 
         HL_PAK_PACKAGE_COUNT = 0,
         HL_PAK_ITEM_COUNT = 0,
+
+        HL_SGA_PACKAGE_VERSION_MAJOR = 0,
+        HL_SGA_PACKAGE_VERSION_MINOR,
+        HL_SGA_PACKAGE_MD5_FILE,
+        HL_SGA_PACKAGE_NAME,
+        HL_SGA_PACKAGE_MD5_HEADER,
+        HL_SGA_PACKAGE_COUNT,
+        HL_SGA_ITEM_SECTION_ALIAS = 0,
+        HL_SGA_ITEM_SECTION_NAME,
+        HL_SGA_ITEM_MODIFIED,
+        HL_SGA_ITEM_TYPE,
+        HL_SGA_ITEM_CRC,
+        HL_SGA_ITEM_COUNT,
 
         HL_VBSP_PACKAGE_VERSION = 0,
         HL_VBSP_PACKAGE_MAP_REVISION,
@@ -478,7 +492,9 @@ public sealed class HLLib
 
     public static string hlGetString(HLOption eOption)
     {
-        if (IsWow64()) return x64.hlGetString(eOption); else return x86.hlGetString(eOption);
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlGetString(eOption); else lpString = x86.hlGetString(eOption);
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static bool hlGetStringValidate(HLOption eOption, out string pValue)
     {
@@ -544,7 +560,9 @@ public sealed class HLLib
 
     public static string hlAttributeGetString(ref HLAttribute pAttribute)
     {
-        if (IsWow64()) return x64.hlAttributeGetString(ref pAttribute); else return x86.hlAttributeGetString(ref pAttribute);
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlAttributeGetString(ref pAttribute); else lpString = x86.hlAttributeGetString(ref pAttribute);
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static void hlAttributeSetString(ref HLAttribute pAttribute, string lpName, string lpValue)
     {
@@ -562,7 +580,9 @@ public sealed class HLLib
 
     public static string hlItemGetName(IntPtr pItem)
     {
-        if (IsWow64()) return x64.hlItemGetName(pItem); else return x86.hlItemGetName(pItem);
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlItemGetName(pItem); else lpString = x86.hlItemGetName(pItem);
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static uint hlItemGetID(IntPtr pItem)
     {
@@ -807,11 +827,15 @@ public sealed class HLLib
     }
     public static string hlPackageGetExtension()
     {
-        if (IsWow64()) return x64.hlPackageGetExtension(); else return x86.hlPackageGetExtension();
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlPackageGetExtension(); else lpString = x86.hlPackageGetExtension();
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static string hlPackageGetDescription()
     {
-        if (IsWow64()) return x64.hlPackageGetDescription(); else return x86.hlPackageGetDescription();
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlPackageGetDescription(); else lpString = x86.hlPackageGetDescription();
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
 
     public static bool hlPackageGetOpened()
@@ -856,7 +880,9 @@ public sealed class HLLib
     }
     public static string hlPackageGetAttributeName(HLPackageAttribute eAttribute)
     {
-        if (IsWow64()) return x64.hlPackageGetAttributeName(eAttribute); else return x86.hlPackageGetAttributeName(eAttribute);
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlPackageGetAttributeName(eAttribute); else lpString = x86.hlPackageGetAttributeName(eAttribute);
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static bool hlPackageGetAttribute(HLPackageAttribute eAttribute, out HLAttribute pAttribute)
     {
@@ -869,7 +895,9 @@ public sealed class HLLib
     }
     public static string hlPackageGetItemAttributeName(HLPackageAttribute eAttribute)
     {
-        if (IsWow64()) return x64.hlPackageGetItemAttributeName(eAttribute); else return x86.hlPackageGetItemAttributeName(eAttribute);
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlPackageGetItemAttributeName(eAttribute); else lpString = x86.hlPackageGetItemAttributeName(eAttribute);
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static bool hlPackageGetItemAttribute(IntPtr pItem, HLPackageAttribute eAttribute, out HLAttribute pAttribute)
     {
@@ -899,7 +927,9 @@ public sealed class HLLib
 
     public static string hlNCFFileGetRootPath()
     {
-        if (IsWow64()) return x64.hlNCFFileGetRootPath(); else return x86.hlNCFFileGetRootPath();
+        IntPtr lpString;
+        if (IsWow64()) lpString = x64.hlNCFFileGetRootPath(); else lpString = x86.hlNCFFileGetRootPath();
+        return lpString == IntPtr.Zero ? string.Empty : Marshal.PtrToStringAnsi(lpString);
     }
     public static void hlNCFFileSetRootPath(string lpRootPath)
     {
@@ -929,356 +959,349 @@ public sealed class HLLib
         // VTFLib
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlInitialize();
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlShutdown();
 
         //
         // Get/Set
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetBoolean(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetBooleanValidate(HLOption eOption, [MarshalAs(UnmanagedType.U1)]out bool pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetBoolean(HLOption eOption, [MarshalAs(UnmanagedType.U1)]bool bValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern int hlGetInteger(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetIntegerValidate(HLOption eOption, out int pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetInteger(HLOption eOption, int iValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlGetUnsignedInteger(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetUnsignedIntegerValidate(HLOption eOption, out uint pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetUnsignedInteger(HLOption eOption, uint uiValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetLongLong")]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetLongLong")]
         public static extern long hlGetLong(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetLongLongValidate")]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetLongLongValidate")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetLongValidate(HLOption eOption, out long pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlSetLongLong")]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlSetLongLong")]
         public static extern void hlSetLong(HLOption eOption, long iValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetUnsignedLongLong")]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetUnsignedLongLong")]
         public static extern ulong hlGetUnsignedLong(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetUnsignedLongLongValidate")]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetUnsignedLongLongValidate")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetUnsignedLongValidate(HLOption eOption, out ulong pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlSetUnsignedLongLong")]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlSetUnsignedLongLong")]
         public static extern void hlSetUnsignedLong(HLOption eOption, ulong uiValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern float hlGetFloat(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetFloatValidate(HLOption eOption, out float pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetFloat(HLOption eOption, float pValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlGetString(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlGetString(HLOption eOption);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetStringValidate(HLOption eOption, out string pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlSetString(HLOption eOption, string lpValue);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlSetString(HLOption eOption, [MarshalAs(UnmanagedType.LPStr)]string lpValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlGetVoid(HLOption eOption);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetVoidValidate(HLOption eOption, out IntPtr pValue);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetVoid(HLOption eOption, IntPtr lpValue);
 
         //
         // Attributes
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlAttributeGetBoolean(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetBoolean(ref HLAttribute pAttribute, string lpName, [MarshalAs(UnmanagedType.U1)]bool bValue);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetBoolean(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, [MarshalAs(UnmanagedType.U1)]bool bValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern int hlAttributeGetInteger(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetInteger(ref HLAttribute pAttribute, string lpName, int iValue);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetInteger(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, int iValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlAttributeGetUnsignedInteger(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetUnsignedInteger(ref HLAttribute pAttribute, string lpName, uint uiValue, [MarshalAs(UnmanagedType.U1)]bool bHexadecimal);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetUnsignedInteger(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, uint uiValue, [MarshalAs(UnmanagedType.U1)]bool bHexadecimal);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern float hlAttributeGetFloat(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetFloat(ref HLAttribute pAttribute, string lpName, float fValue);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetFloat(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, float fValue);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlAttributeGetString(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetString(ref HLAttribute pAttribute, string lpName, string lpValue);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlAttributeGetString(ref HLAttribute pAttribute);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetString(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, [MarshalAs(UnmanagedType.LPStr)]string lpValue);
 
         //
         // Directory Item
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLDirectoryItemType hlItemGetType(IntPtr pItem);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlItemGetName(IntPtr pItem);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        //[return: MarshalAs(UnmanagedType.LPStr)]
+        public static extern IntPtr hlItemGetName(IntPtr pItem);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlItemGetID(IntPtr pItem);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlItemGetData(IntPtr pItem);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlItemGetPackage(IntPtr pItem);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlItemGetParent(IntPtr pItem);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSize(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSizeEx(IntPtr pItem, out UInt64 pSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSizeOnDisk(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSizeOnDiskEx(IntPtr pItem, out UInt64 pSize);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetPath(IntPtr pItem, IntPtr lpPath, uint uiPathSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool hlItemExtract(IntPtr pItem, string lpPath);
+        public static extern bool hlItemExtract(IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpPath);
 
         //
         // Directory Folder
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetCount(IntPtr pItem);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlFolderGetItem(IntPtr pItem, uint uiIndex);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderGetItemByName(IntPtr pItem, string lpName, HLFindType eFind);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderGetItemByPath(IntPtr pItem, string lpPath, HLFindType eFind);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderGetItemByName(IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpName, HLFindType eFind);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderGetItemByPath(IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpPath, HLFindType eFind);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlFolderSort(IntPtr pItem, HLSortField eField, HLSortOrder eOrder, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderFindFirst(IntPtr pFolder, string lpSearch, HLFindType eFind);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderFindNext(IntPtr pFolder, IntPtr pItem, string lpSearch, HLFindType eFind);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderFindFirst(IntPtr pFolder, [MarshalAs(UnmanagedType.LPStr)]string lpSearch, HLFindType eFind);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderFindNext(IntPtr pFolder, IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpSearch, HLFindType eFind);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetSize(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern UInt64 hlFolderGetSizeEx(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetSizeOnDisk(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern UInt64 hlFolderGetSizeOnDiskEx(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetFolderCount(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetFileCount(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
 
         //
         // Directory File
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFileGetExtractable(IntPtr pItem);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLValidation hlFileGetValidation(IntPtr pItem);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFileGetSize(IntPtr pItem);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFileGetSizeOnDisk(IntPtr pItem);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlFileCreateStream(IntPtr pItem, out IntPtr pStream);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlFileReleaseStream(IntPtr pItem, IntPtr pStream);
 
         //
         // Stream
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLStreamType hlStreamGetType(IntPtr pStream);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamGetOpened(IntPtr pStream);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamGetMode(IntPtr pStream);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamOpen(IntPtr pStream, uint uiMode);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlStreamClose(IntPtr pStream);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamGetStreamSize(IntPtr pStream);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern ulong hlStreamGetStreamSizeEx(IntPtr pStream);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamGetStreamPointer(IntPtr pStream);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern ulong hlStreamGetStreamPointerEx(IntPtr pStream);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamSeek(IntPtr pStream, long iOffset, HLSeekMode eSeekMode);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern ulong hlStreamSeekEx(IntPtr pStream, long iOffset, HLSeekMode eSeekMode);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamReadChar(IntPtr pStream, out char pChar);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamRead(IntPtr pStream, IntPtr lpData, uint uiBytes);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamWriteChar(IntPtr pStream, char iChar);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamWrite(IntPtr pStream, IntPtr lpData, uint uiBytes);
 
         //
         // Package
         //
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlBindPackage(uint uiPackage);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern HLPackageType hlGetPackageTypeFromName(string lpName);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern HLPackageType hlGetPackageTypeFromName([MarshalAs(UnmanagedType.LPStr)]string lpName);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLPackageType hlGetPackageTypeFromMemory(IntPtr lpBuffer, uint uiBufferSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLPackageType hlGetPackageTypeFromStream(IntPtr pStream);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlCreatePackage(HLPackageType ePackageType, out uint uiPackage);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlDeletePackage(uint uiPackage);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLPackageType hlPackageGetType();
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetExtension();
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetDescription();
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetExtension();
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetDescription();
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetOpened();
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool hlPackageOpenFile(string lpFileName, uint uiMode);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool hlPackageOpenFile([MarshalAs(UnmanagedType.LPStr)]string lpFileName, uint uiMode);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageOpenMemory(IntPtr lpData, uint uiBufferSize, uint uiMode);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageOpenProc(IntPtr pUserData, uint uiMode);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageOpenStream(IntPtr pStream, uint uiMode);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlPackageClose();
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageDefragment();
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlPackageGetRoot();
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlPackageGetAttributeCount();
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetAttributeName(HLPackageAttribute eAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetAttributeName(HLPackageAttribute eAttribute);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetAttribute(HLPackageAttribute eAttribute, out HLAttribute pAttribute);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlPackageGetItemAttributeCount();
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetItemAttributeName(HLPackageAttribute eAttribute);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetItemAttributeName(HLPackageAttribute eAttribute);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetItemAttribute(IntPtr pItem, HLPackageAttribute eAttribute, out HLAttribute pAttribute);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetExtractable(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]out bool pExtractable);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetFileSize(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetFileSizeOnDisk(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageCreateStream(IntPtr pItem, out IntPtr pStream);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlPackageReleaseStream(IntPtr pStream);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlNCFFileGetRootPath();
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlNCFFileSetRootPath(string lpRootPath);
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlNCFFileGetRootPath();
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlNCFFileSetRootPath([MarshalAs(UnmanagedType.LPStr)]string lpRootPath);
 
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageSizePaletted(IntPtr pItem, out uint uiPaletteDataSize, out uint uiPixelDataSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageDataPaletted(IntPtr pItemm, out uint uiWidth, out uint uiHeight, out IntPtr lpPaletteData, out IntPtr lpPixelData);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageSize(IntPtr pItem, out uint uiPixelDataSize);
-        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x86.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageData(IntPtr pItem, out uint uiWidth, out uint uiHeight, out IntPtr lpPixelData);
     }
@@ -1289,356 +1312,349 @@ public sealed class HLLib
         // VTFLib
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlInitialize();
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlShutdown();
 
         //
         // Get/Set
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetBoolean(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetBooleanValidate(HLOption eOption, [MarshalAs(UnmanagedType.U1)]out bool pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetBoolean(HLOption eOption, [MarshalAs(UnmanagedType.U1)]bool bValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern int hlGetInteger(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetIntegerValidate(HLOption eOption, out int pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetInteger(HLOption eOption, int iValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlGetUnsignedInteger(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetUnsignedIntegerValidate(HLOption eOption, out uint pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetUnsignedInteger(HLOption eOption, uint uiValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetLongLong")]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetLongLong")]
         public static extern long hlGetLong(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetLongLongValidate")]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetLongLongValidate")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetLongValidate(HLOption eOption, out long pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlSetLongLong")]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlSetLongLong")]
         public static extern void hlSetLong(HLOption eOption, long iValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetUnsignedLongLong")]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetUnsignedLongLong")]
         public static extern ulong hlGetUnsignedLong(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlGetUnsignedLongLongValidate")]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlGetUnsignedLongLongValidate")]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetUnsignedLongValidate(HLOption eOption, out ulong pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "hlSetUnsignedLongLong")]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi, EntryPoint = "hlSetUnsignedLongLong")]
         public static extern void hlSetUnsignedLong(HLOption eOption, ulong uiValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern float hlGetFloat(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetFloatValidate(HLOption eOption, out float pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetFloat(HLOption eOption, float pValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlGetString(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlGetString(HLOption eOption);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetStringValidate(HLOption eOption, out string pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlSetString(HLOption eOption, string lpValue);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlSetString(HLOption eOption, [MarshalAs(UnmanagedType.LPStr)]string lpValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlGetVoid(HLOption eOption);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlGetVoidValidate(HLOption eOption, out IntPtr pValue);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlSetVoid(HLOption eOption, IntPtr lpValue);
 
         //
         // Attributes
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlAttributeGetBoolean(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetBoolean(ref HLAttribute pAttribute, string lpName, [MarshalAs(UnmanagedType.U1)]bool bValue);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetBoolean(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, [MarshalAs(UnmanagedType.U1)]bool bValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern int hlAttributeGetInteger(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetInteger(ref HLAttribute pAttribute, string lpName, int iValue);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetInteger(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, int iValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlAttributeGetUnsignedInteger(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetUnsignedInteger(ref HLAttribute pAttribute, string lpName, uint uiValue, [MarshalAs(UnmanagedType.U1)]bool bHexadecimal);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetUnsignedInteger(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, uint uiValue, [MarshalAs(UnmanagedType.U1)]bool bHexadecimal);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern float hlAttributeGetFloat(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetFloat(ref HLAttribute pAttribute, string lpName, float fValue);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetFloat(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, float fValue);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlAttributeGetString(ref HLAttribute pAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlAttributeSetString(ref HLAttribute pAttribute, string lpName, string lpValue);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlAttributeGetString(ref HLAttribute pAttribute);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlAttributeSetString(ref HLAttribute pAttribute, [MarshalAs(UnmanagedType.LPStr)]string lpName, [MarshalAs(UnmanagedType.LPStr)]string lpValue);
 
         //
         // Directory Item
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLDirectoryItemType hlItemGetType(IntPtr pItem);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlItemGetName(IntPtr pItem);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        //[return: MarshalAs(UnmanagedType.LPStr)]
+        public static extern IntPtr hlItemGetName(IntPtr pItem);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlItemGetID(IntPtr pItem);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlItemGetData(IntPtr pItem);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlItemGetPackage(IntPtr pItem);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlItemGetParent(IntPtr pItem);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSize(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSizeEx(IntPtr pItem, out UInt64 pSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSizeOnDisk(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetSizeOnDiskEx(IntPtr pItem, out UInt64 pSize);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlItemGetPath(IntPtr pItem, IntPtr lpPath, uint uiPathSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool hlItemExtract(IntPtr pItem, string lpPath);
+        public static extern bool hlItemExtract(IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpPath);
 
         //
         // Directory Folder
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetCount(IntPtr pItem);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlFolderGetItem(IntPtr pItem, uint uiIndex);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderGetItemByName(IntPtr pItem, string lpName, HLFindType eFind);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderGetItemByPath(IntPtr pItem, string lpPath, HLFindType eFind);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderGetItemByName(IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpName, HLFindType eFind);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderGetItemByPath(IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpPath, HLFindType eFind);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlFolderSort(IntPtr pItem, HLSortField eField, HLSortOrder eOrder, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderFindFirst(IntPtr pFolder, string lpSearch, HLFindType eFind);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern IntPtr hlFolderFindNext(IntPtr pFolder, IntPtr pItem, string lpSearch, HLFindType eFind);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderFindFirst(IntPtr pFolder, [MarshalAs(UnmanagedType.LPStr)]string lpSearch, HLFindType eFind);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlFolderFindNext(IntPtr pFolder, IntPtr pItem, [MarshalAs(UnmanagedType.LPStr)]string lpSearch, HLFindType eFind);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetSize(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern UInt64 hlFolderGetSizeEx(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetSizeOnDisk(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern UInt64 hlFolderGetSizeOnDiskEx(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetFolderCount(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFolderGetFileCount(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]bool bRecurse);
 
         //
         // Directory File
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFileGetExtractable(IntPtr pItem);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLValidation hlFileGetValidation(IntPtr pItem);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFileGetSize(IntPtr pItem);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlFileGetSizeOnDisk(IntPtr pItem);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlFileCreateStream(IntPtr pItem, out IntPtr pStream);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlFileReleaseStream(IntPtr pItem, IntPtr pStream);
 
         //
         // Stream
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLStreamType hlStreamGetType(IntPtr pStream);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamGetOpened(IntPtr pStream);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamGetMode(IntPtr pStream);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamOpen(IntPtr pStream, uint uiMode);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlStreamClose(IntPtr pStream);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamGetStreamSize(IntPtr pStream);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern ulong hlStreamGetStreamSizeEx(IntPtr pStream);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamGetStreamPointer(IntPtr pStream);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern ulong hlStreamGetStreamPointerEx(IntPtr pStream);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamSeek(IntPtr pStream, long iOffset, HLSeekMode eSeekMode);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern ulong hlStreamSeekEx(IntPtr pStream, long iOffset, HLSeekMode eSeekMode);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamReadChar(IntPtr pStream, out char pChar);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamRead(IntPtr pStream, IntPtr lpData, uint uiBytes);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlStreamWriteChar(IntPtr pStream, char iChar);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlStreamWrite(IntPtr pStream, IntPtr lpData, uint uiBytes);
 
         //
         // Package
         //
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlBindPackage(uint uiPackage);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern HLPackageType hlGetPackageTypeFromName(string lpName);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern HLPackageType hlGetPackageTypeFromName([MarshalAs(UnmanagedType.LPStr)]string lpName);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLPackageType hlGetPackageTypeFromMemory(IntPtr lpBuffer, uint uiBufferSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLPackageType hlGetPackageTypeFromStream(IntPtr pStream);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlCreatePackage(HLPackageType ePackageType, out uint uiPackage);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlDeletePackage(uint uiPackage);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern HLPackageType hlPackageGetType();
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetExtension();
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetDescription();
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetExtension();
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetDescription();
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetOpened();
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
-        public static extern bool hlPackageOpenFile(string lpFileName, uint uiMode);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        public static extern bool hlPackageOpenFile([MarshalAs(UnmanagedType.LPStr)]string lpFileName, uint uiMode);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageOpenMemory(IntPtr lpData, uint uiBufferSize, uint uiMode);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageOpenProc(IntPtr pUserData, uint uiMode);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageOpenStream(IntPtr pStream, uint uiMode);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlPackageClose();
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageDefragment();
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern IntPtr hlPackageGetRoot();
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlPackageGetAttributeCount();
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetAttributeName(HLPackageAttribute eAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetAttributeName(HLPackageAttribute eAttribute);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetAttribute(HLPackageAttribute eAttribute, out HLAttribute pAttribute);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern uint hlPackageGetItemAttributeCount();
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlPackageGetItemAttributeName(HLPackageAttribute eAttribute);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlPackageGetItemAttributeName(HLPackageAttribute eAttribute);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetItemAttribute(IntPtr pItem, HLPackageAttribute eAttribute, out HLAttribute pAttribute);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetExtractable(IntPtr pItem, [MarshalAs(UnmanagedType.U1)]out bool pExtractable);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetFileSize(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageGetFileSizeOnDisk(IntPtr pItem, out uint pSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlPackageCreateStream(IntPtr pItem, out IntPtr pStream);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         public static extern void hlPackageReleaseStream(IntPtr pStream);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.LPStr)]
-        public static extern string hlNCFFileGetRootPath();
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern void hlNCFFileSetRootPath(string lpRootPath);
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern IntPtr hlNCFFileGetRootPath();
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
+        public static extern void hlNCFFileSetRootPath([MarshalAs(UnmanagedType.LPStr)]string lpRootPath);
 
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageSizePaletted(IntPtr pItem, out uint uiPaletteDataSize, out uint uiPixelDataSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageDataPaletted(IntPtr pItemm, out uint uiWidth, out uint uiHeight, out IntPtr lpPaletteData, out IntPtr lpPixelData);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageSize(IntPtr pItem, out uint uiPixelDataSize);
-        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl)]
+        [DllImport("HLLib.x64.dll", CallingConvention = CallingConvention.Cdecl, CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.U1)]
         public static extern bool hlWADFileGetImageData(IntPtr pItem, out uint uiWidth, out uint uiHeight, out IntPtr lpPixelData);
     }

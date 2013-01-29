@@ -187,17 +187,15 @@ hlULongLong CFileStream::Seek(hlLongLong iOffset, HLSeekMode eSeekMode)
 	DWORD dwMode = FILE_BEGIN;
 	switch(eSeekMode)
 	{
-        /*case HL_SEEK_BEGINNING:
-            dwMode = FILE_BEGIN;
-            break;*/
-        case HL_SEEK_CURRENT:
-            dwMode = FILE_CURRENT;
-            break;
-        case HL_SEEK_END:
-            dwMode = FILE_END;
-            break;
-        default:
-            break;
+	/*case HL_SEEK_BEGINNING:
+		dwMode = FILE_BEGIN;
+		break;*/
+	case HL_SEEK_CURRENT:
+		dwMode = FILE_CURRENT;
+		break;
+	case HL_SEEK_END:
+		dwMode = FILE_END;
+		break;
 	}
 
 	LARGE_INTEGER liOffset;
@@ -209,17 +207,17 @@ hlULongLong CFileStream::Seek(hlLongLong iOffset, HLSeekMode eSeekMode)
 	hlInt iMode = SEEK_SET;
 	switch(eSeekMode)
 	{
-        /*case HL_SEEK_BEGINNING:
-            iMode = SEEK_SET;
-            break;*/
-        case HL_SEEK_CURRENT:
-            iMode = SEEK_CUR;
-            break;
-        case HL_SEEK_END:
-            iMode = SEEK_END;
-            break;
-        default:
-            break;
+		/*case HL_SEEK_BEGINNING:
+			iMode = SEEK_SET;
+			break;*/
+		case HL_SEEK_CURRENT:
+			iMode = SEEK_CUR;
+			break;
+		case HL_SEEK_END:
+			iMode = SEEK_END;
+			break;
+		default:
+			break;
 	}
 
 	return (hlUInt)lseek(this->iFile, iOffset, iMode);

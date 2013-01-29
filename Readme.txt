@@ -9,11 +9,11 @@ Library/Author Information:
 ===========================
 
 ---- General Library Information ----
-Date                     : November 1st, 2010
+Date                     : January 27th, 2013
 Author                   : Ryan Gregg
                            Michael Mohr (Linux Port)
 Title                    : HLLib
-Build                    : 2.4.0
+Build                    : 2.4.4
 Email address            : ryansgregg@hotmail.com (Ryan Gregg)
                            m.mohr@laposte.net (Michael Mohr)
 Home page /  Website     : http://nemesis.thewavelength.net/
@@ -33,6 +33,9 @@ The library contains four folders:
   HLExtract
   - Contains example program source code.
 
+  HLExtract.Net
+  - Contains example .Net wrapper program source code.
+
   HLLib
   - Contains library source code.
 
@@ -42,7 +45,7 @@ The library contains four folders:
   Sln
   - Contains Visual Studio solutions.
 
-The project files are for Visual Studio .NET 2003 and 2005; no .NET extensions are used.
+The project files are for Visual Studio .NET 2005, 2008 and 2010; no .NET extensions are used.
 
 ================
 HLExtract Usage:
@@ -90,7 +93,23 @@ Console Commands (Interactive console mode):
 Library Changelog:
 ==================
 
-  v2.3.0
+  v2.4.4
+  - Fixed support for VPK file format (v1).
+
+  v2.4.3
+  - Added support for new VPK file format (v2).
+  - Added SGA file support.
+  - Added ZIP deflate support.
+
+  v2.4.2
+  - Fixed crash when opening VBSP files with no pak file lump.
+
+  v2.4.1
+  - Fixed crash in CProcStream.
+  - Fixed VPK signature check.
+  - Workaround for crash in .Net wrapper. 
+
+  v2.4.0
   - Added support for GCF files larger than 4 GB.
 
   v2.3.0
@@ -106,7 +125,7 @@ Library Changelog:
   - Added support for new VBSP file format.
 
   v2.1.1
-  - Added support for new VPK file format.
+  - Added support for new VPK file format (v1).
   - Added VPK file validation.
   - Fixed crash when closing VPK files.
 

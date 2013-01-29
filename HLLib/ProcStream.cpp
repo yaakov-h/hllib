@@ -133,7 +133,7 @@ hlULongLong CProcStream::Seek(hlLongLong iOffset, HLSeekMode eSeekMode)
 	}
 	else if(pSeekProc != 0)
 	{
-		return static_cast<hlULongLong>(pSeekExProc(iOffset, eSeekMode, this->pUserData));
+		return static_cast<hlULongLong>(pSeekProc(iOffset, eSeekMode, this->pUserData));
 	}
 
 	LastError.SetErrorMessage("pSeekProc not set.");

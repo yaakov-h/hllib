@@ -74,6 +74,8 @@
 		968D172B13763736002312DC /* XZPFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 968D16E613763736002312DC /* XZPFile.h */; };
 		968D172C13763736002312DC /* ZIPFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 968D16E713763736002312DC /* ZIPFile.cpp */; };
 		968D172D13763736002312DC /* ZIPFile.h in Headers */ = {isa = PBXBuildFile; fileRef = 968D16E813763736002312DC /* ZIPFile.h */; };
+		D7C58CD916B7F22200A23E16 /* SGAFile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7C58CD716B7F22200A23E16 /* SGAFile.cpp */; };
+		D7C58CDA16B7F22200A23E16 /* SGAFile.h in Headers */ = {isa = PBXBuildFile; fileRef = D7C58CD816B7F22200A23E16 /* SGAFile.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -149,6 +151,8 @@
 		968D16E713763736002312DC /* ZIPFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZIPFile.cpp; sourceTree = "<group>"; };
 		968D16E813763736002312DC /* ZIPFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZIPFile.h; sourceTree = "<group>"; };
 		D2F7E79907B2D74100F64583 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
+		D7C58CD716B7F22200A23E16 /* SGAFile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SGAFile.cpp; sourceTree = "<group>"; };
+		D7C58CD816B7F22200A23E16 /* SGAFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGAFile.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,6 +252,8 @@
 				968D16D213763736002312DC /* ProcStream.cpp */,
 				968D16D313763736002312DC /* ProcStream.h */,
 				968D16D413763736002312DC /* resource.h */,
+				D7C58CD716B7F22200A23E16 /* SGAFile.cpp */,
+				D7C58CD816B7F22200A23E16 /* SGAFile.h */,
 				968D16D513763736002312DC /* stdafx.h */,
 				968D16D613763736002312DC /* Stream.cpp */,
 				968D16D713763736002312DC /* Stream.h */,
@@ -334,6 +340,7 @@
 				968D172913763736002312DC /* Wrapper.h in Headers */,
 				968D172B13763736002312DC /* XZPFile.h in Headers */,
 				968D172D13763736002312DC /* ZIPFile.h in Headers */,
+				D7C58CDA16B7F22200A23E16 /* SGAFile.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,6 +439,7 @@
 				968D172813763736002312DC /* Wrapper.cpp in Sources */,
 				968D172A13763736002312DC /* XZPFile.cpp in Sources */,
 				968D172C13763736002312DC /* ZIPFile.cpp in Sources */,
+				D7C58CD916B7F22200A23E16 /* SGAFile.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
