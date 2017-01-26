@@ -247,7 +247,7 @@ hlBool CFileStream::Read(hlChar &cChar)
 
 	return ulBytesRead == 1;
 #else
-	hlInt iBytesRead = read(this->iFile, &cChar, 1);
+	ssize_t iBytesRead = read(this->iFile, &cChar, 1);
 
 	if(iBytesRead < 0)
 	{
@@ -281,7 +281,7 @@ hlUInt CFileStream::Read(hlVoid *lpData, hlUInt uiBytes)
 
 	return (hlUInt)ulBytesRead;
 #else
-	hlInt iBytesRead = read(this->iFile, lpData, uiBytes);
+	ssize_t iBytesRead = read(this->iFile, lpData, uiBytes);
 
 	if(iBytesRead < 0)
 	{
@@ -315,7 +315,7 @@ hlBool CFileStream::Write(hlChar cChar)
 
 	return ulBytesWritten == 1;
 #else
-	hlInt iBytesWritten = write(this->iFile, &cChar, 1);
+	ssize_t iBytesWritten = write(this->iFile, &cChar, 1);
 
 	if(iBytesWritten < 0)
 	{
@@ -349,7 +349,7 @@ hlUInt CFileStream::Write(const hlVoid *lpData, hlUInt uiBytes)
 
 	return (hlUInt)ulBytesWritten;
 #else
-	hlInt iBytesWritten = write(this->iFile, lpData, uiBytes);
+	ssize_t iBytesWritten = write(this->iFile, lpData, uiBytes);
 
 	if(iBytesWritten < 0)
 	{

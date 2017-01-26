@@ -351,11 +351,11 @@ hlVoid HLLib::MD5_Finalize(MD5Context& context, hlByte (&lpDigest)[16])
 	hlULong uiBlockLength = context.uiLength % sizeof(context.lpBlock);
 	if(uiBlockLength < sizeof(context.lpBlock) - sizeof(hlULongLong))
 	{
-		MD5_Update(context, lpMD5Padding, sizeof(context.lpBlock) - sizeof(uiLengthInBits) - uiBlockLength);
+		MD5_Update(context, lpMD5Padding, (hlUInt)(sizeof(context.lpBlock) - sizeof(uiLengthInBits) - uiBlockLength));
 	}
 	else
 	{
-		MD5_Update(context, lpMD5Padding, 2 * sizeof(context.lpBlock) - sizeof(uiLengthInBits) - uiBlockLength);
+		MD5_Update(context, lpMD5Padding, (hlUInt)(2 * sizeof(context.lpBlock) - sizeof(uiLengthInBits) - uiBlockLength));
 	}
 
 	MD5_Update(context, reinterpret_cast<hlByte*>(&uiLengthInBits), sizeof(uiLengthInBits));
